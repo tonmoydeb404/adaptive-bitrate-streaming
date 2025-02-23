@@ -17,7 +17,14 @@ export class UploadController {
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UploadDto })
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log('File uploaded:', file);
+
+    if (!file) {
+      return { message: 'No file was uploaded' };
+    }
+
+    const convertedPath = await this.uploadService.convertToHLS(file.path);
+    return { message: 'Video converted to HLS successfully', convertedPath };
   }
 }
