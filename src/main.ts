@@ -9,7 +9,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   // Enable CORS
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  });
 
   // Documentation Setup
   const config = new DocumentBuilder()
