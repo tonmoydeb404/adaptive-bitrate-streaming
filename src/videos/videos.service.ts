@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class VideosService {
@@ -13,11 +12,8 @@ export class VideosService {
 
     return fs.readdirSync(this.videosPath).map((video) => ({
       name: video,
-      path: path.join(
-        process.env.SERVER_URL,
-        'videos-stream',
-        video,
-        'index.m3u8',
+      path: [process.env.SERVER_URL, 'videos-stream', video, 'index.m3u8'].join(
+        '/',
       ),
     }));
   }

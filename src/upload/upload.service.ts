@@ -14,7 +14,13 @@ export class UploadService {
     }
 
     const outputFile = path.join(outputDir, 'index.m3u8');
-    const ffmpegCommand = `ffmpeg -i "${filePath}" -profile:v baseline -level 3.0 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls "${outputFile}"`;
+    const ffmpegCommand = `ffmpeg -i ${filePath} \
+        -map 0:v -c:v libx264 -crf 23 -preset medium -g 48 \
+        -map 0:v -c:v libx264 -crf 28 -preset fast -g 48 \
+        -map 0:v -c:v libx264 -crf 32 -preset fast -g 48 \
+        -map 0:a -c:a aac -b:a 128k \
+        -hls_time 10 -hls_playlist_type vod -hls_flags independent_segments -report \
+        -f hls ${outputFile}`;
 
     return new Promise((resolve, reject) => {
       exec(ffmpegCommand, (error, stdout, stderr) => {
