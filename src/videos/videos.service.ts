@@ -12,9 +12,12 @@ export class VideosService {
 
     return fs.readdirSync(this.videosPath).map((video) => ({
       name: video,
-      path: [process.env.SERVER_URL, 'videos-stream', video, 'index.m3u8'].join(
-        '/',
-      ),
+      path: [
+        process.env.SERVER_URL,
+        'videos-stream',
+        video,
+        'master.m3u8',
+      ].join('/'),
     }));
   }
 }
